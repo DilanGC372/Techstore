@@ -6,8 +6,9 @@ from flask import Flask, render_template, request
 from productos_demo import PRODUCTOS_DEMO
 from api_accesorios import ErrorCatalogo, obtener_accesorios, obtener_computadoras
 
-# Flask busca las plantillas en templates y los recursos estáticos en public.
-app = Flask(__name__, static_folder="public")
+# Vercel publica el contenido de public/ desde la raíz; Flask local usa las
+# mismas direcciones para que CSS, JavaScript e imágenes funcionen en ambos.
+app = Flask(__name__, static_folder="public", static_url_path="")
 app.config["ACCESORIOS_API_URL"] = os.environ.get(
     "ACCESORIOS_API_URL",
     "http://54.164.87.181:8000/api/accesorios",

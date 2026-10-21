@@ -59,10 +59,10 @@ class CatalogoTests(unittest.TestCase):
         html = respuesta.get_data(as_text=True)
         self.assertIn("$1,299.50 MXN", html)
         self.assertIn("Agotado", html)
-        self.assertIn('src="/public/images/accesorios/teclado-rgb.png"', html)
+        self.assertIn('src="/images/accesorios/teclado-rgb.png"', html)
         self.assertNotIn("de ejemplo", html)
         self.assertNotIn("api.example", html)
-        with self.client.get(PRODUCTO["imagen_url"]) as imagen:
+        with self.client.get("/images/accesorios/teclado-rgb.png") as imagen:
             self.assertEqual(imagen.status_code, 200)
 
     def test_inicio_no_consulta_api(self):
@@ -83,7 +83,7 @@ class CatalogoTests(unittest.TestCase):
         self.assertEqual(respuesta.status_code, 200)
         html = respuesta.get_data(as_text=True)
         self.assertIn("$12,499.00 MXN", html)
-        self.assertIn('src="/public/images/computadoras/laptop-ideapad.png"', html)
+        self.assertIn('src="/images/computadoras/laptop-ideapad.png"', html)
         self.assertNotIn("de ejemplo", html)
 
     def test_error_de_computadoras_no_muestra_demo(self):
@@ -133,7 +133,7 @@ class CatalogoTests(unittest.TestCase):
             with self.subTest(ruta=ruta):
                 respuesta = self.pedir({"productos": [{**PRODUCTO, "imagen_url": ruta}]})
                 self.assertEqual(respuesta.status_code, 200)
-                self.assertIn('src="/public/images/imagen-pendiente.svg"',
+                self.assertIn('src="/images/imagen-pendiente.svg"',
                               respuesta.get_data(as_text=True))
 
     def test_texto_api_escapado_y_campos_opcionales(self):

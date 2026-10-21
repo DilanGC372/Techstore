@@ -34,8 +34,9 @@ Invoke-RestMethod -Uri 'http://54.83.158.131:5000/computadoras' -TimeoutSec 8
 ```
 
 Si ambas devuelven `productos`, abre o recarga `/accesorios` y `/computadoras`.
-Comprueba precios en MXN, existencias e imágenes. En las herramientas de red del
-navegador, las imágenes deben salir de `/public/images/` en el frontend.
+Comprueba precios en MXN, existencias e imágenes. Aunque las APIs devuelven rutas
+que comienzan con `/public/images/`, el frontend las convierte a `/images/`, que
+es la ruta usada por Flask local y por el CDN de Vercel.
 
 El cliente HTTP espera hasta 8 segundos por operación de conexión/lectura, sin
 reintentos automáticos. Valida el JSON y los campos antes de mostrar tarjetas.
