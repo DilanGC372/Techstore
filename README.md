@@ -29,7 +29,7 @@ es solo una referencia; el proyecto no lee `.env` y no necesita credenciales RDS
 Desde otra terminal de tu computadora:
 
 ```powershell
-Invoke-RestMethod -Uri 'http://54.164.87.181:8000/api/accesorios' -TimeoutSec 8
+Invoke-RestMethod -Uri 'http://184.197.49.100:8000/api/accesorios' -TimeoutSec 8
 Invoke-RestMethod -Uri 'http://54.83.158.131:5000/computadoras' -TimeoutSec 8
 ```
 

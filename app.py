@@ -11,7 +11,7 @@ from api_accesorios import ErrorCatalogo, obtener_accesorios, obtener_computador
 app = Flask(__name__, static_folder="public", static_url_path="")
 app.config["ACCESORIOS_API_URL"] = os.environ.get(
     "ACCESORIOS_API_URL",
-    "http://54.164.87.181:8000/api/accesorios",
+    "http://184.197.49.100:8000/api/accesorios",
 )
 app.config["COMPUTADORAS_API_URL"] = os.environ.get(
     "COMPUTADORAS_API_URL",
