@@ -1,6 +1,6 @@
 
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from flask import Flask, render_template, request
 
@@ -12,9 +12,17 @@ from api_accesorios import (
 )
 
 
-# Vercel publica public/ desde la raiz.
-# Flask local utiliza las mismas rutas para los archivos estaticos.
-app = Flask(__name__, static_folder="public", static_url_path="")
+# --------------------------------------------------
+# CONFIGURACION DE FLASK
+# --------------------------------------------------
+
+# Vercel publica public/ desde la raiz del sitio.
+# Flask local conserva las mismas rutas.
+app = Flask(
+    __name__,
+    static_folder="public",
+    static_url_path="",
+)
 
 
 # --------------------------------------------------
@@ -38,11 +46,13 @@ app.config["COMPUTADORAS_API_URL"] = os.environ.get(
 
 @app.after_request
 def evitar_cache_de_catalogos(respuesta):
-    """Obliga a consultar Flask al recargar un catalogo."""
+    """Evita utilizar catalogos HTML almacenados en cache."""
+
     if request.endpoint in {"accesorios", "computadoras"}:
         respuesta.headers["Cache-Control"] = "no-store, max-age=0"
         respuesta.headers["Pragma"] = "no-cache"
         respuesta.headers["Expires"] = "0"
+
     return respuesta
 
 
@@ -57,7 +67,65 @@ def index():
 
 
 # --------------------------------------------------
-# PRESENTACION DEL CATALOGO
+# VALIDACION SEGURA DE IMAGENES
+# --------------------------------------------------
+
+def obtener_imagen_local(imagen_url):
+    """
+    Convierte rutas locales de la API a rutas publicas.
+
+    Ejemplo:
+
+    Entrada:
+        /public/images/accesorios/teclado-rgb.png
+
+    Salida:
+        images/accesorios/teclado-rgb.png
+
+    No admite URLs externas, rutas absolutas arbitrarias,
+    barras invertidas ni recorridos de directorios.
+    """
+
+    if not isinstance(imagen_url, str):
+        return None
+
+    if not imagen_url.startswith("/public/images/"):
+        return None
+
+    ruta = imagen_url.removeprefix("/public/")
+
+    if (
+        "\\" in ruta
+        or "?" in ruta
+        or "#" in ruta
+        or "%" in ruta
+        or any(ord(caracter) < 32 for caracter in ruta)
+    ):
+        return None
+
+    partes = PurePosixPath(ruta).parts
+
+    if (
+        len(partes) < 3
+        or partes[0] != "images"
+        or partes[1] not in {"accesorios", "computadoras"}
+        or any(parte in {"", ".", ".."} for parte in ruta.split("/"))
+    ):
+        return None
+
+    # Verificar extension de imagen permitida.
+    extensiones = {".png", ".jpg", ".jpeg", ".webp", ".svg"}
+
+    if PurePosixPath(ruta).suffix.lower() not in extensiones:
+        return None
+
+    # No comprobamos is_file() en Vercel.
+    # Los archivos de public/ son publicados por separado.
+    return ruta
+
+
+# --------------------------------------------------
+# PREPARACION DEL CATALOGO
 # --------------------------------------------------
 
 def mostrar_catalogo(
@@ -68,10 +136,11 @@ def mostrar_catalogo(
     demo=True,
     error=None,
 ):
-    """Prepara unicamente los productos solicitados."""
+    """Prepara los productos de la categoria solicitada."""
+
     productos = []
 
-    # Ilustraciones genericas disponibles.
+    # Ilustraciones genericas para el modo demostracion.
     ilustraciones = {
         1: "images/laptop-plateada.png",
         2: "images/laptop-plateada.png",
@@ -81,30 +150,19 @@ def mostrar_catalogo(
     }
 
     for original in (PRODUCTOS_DEMO if fuente is None else fuente):
+
         if original["categoria"] != categoria:
             continue
 
         producto = original.copy()
 
-        # Las imagenes pertenecen al frontend, no a EC2.
-        ruta = producto.get("imagen_url") or ""
-        archivo = ruta.removeprefix("/public/")
-        raiz = Path(app.static_folder).resolve()
+        # Recuperar la ruta de imagen proporcionada por la API.
+        ruta_imagen = producto.get("imagen_url")
 
-        try:
-            destino = (raiz / archivo).resolve()
-
-            imagen_local = (
-                ruta.startswith("/public/images/")
-                and destino.is_relative_to(raiz / "images")
-                and destino.is_file()
-            )
-
-        except (OSError, ValueError):
-            imagen_local = False
+        imagen_local = obtener_imagen_local(ruta_imagen)
 
         if imagen_local:
-            producto["imagen_archivo"] = archivo
+            producto["imagen_archivo"] = imagen_local
             producto["imagen_nota"] = (
                 "Imagen ilustrativa del producto."
             )
@@ -140,6 +198,7 @@ def mostrar_catalogo(
 
 @app.route("/computadoras")
 def computadoras():
+
     error = None
 
     try:
@@ -178,11 +237,10 @@ def computadoras():
 
 @app.route("/accesorios")
 def accesorios():
+
     error = None
 
     try:
-        # La clave se obtiene del entorno del servidor.
-        # Nunca se envia al navegador.
         api_key = os.environ.get("TECHSTORE_API_KEY")
 
         if not api_key or not api_key.strip():
@@ -225,6 +283,7 @@ def accesorios():
 # --------------------------------------------------
 
 if __name__ == "__main__":
+
     app.config["TEMPLATES_AUTO_RELOAD"] = True
 
     app.run(
