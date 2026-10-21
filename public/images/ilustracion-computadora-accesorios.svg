@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="580" viewBox="0 0 760 580">
+  <defs>
+    <linearGradient id="metal" x2="0.8" y2="1"><stop stop-color="#f8fbff"/><stop offset=".5" stop-color="#a3adbd"/><stop offset="1" stop-color="#e8edf5"/></linearGradient>
+    <linearGradient id="screen" x2="1" y2="1"><stop stop-color="#060d23"/><stop offset=".6" stop-color="#153e9a"/><stop offset="1" stop-color="#07132e"/></linearGradient>
+    <linearGradient id="wave" x2=".8" y2="1"><stop stop-color="#83c2ff"/><stop offset=".45" stop-color="#286bec"/><stop offset="1" stop-color="#132653"/></linearGradient>
+    <linearGradient id="dark" x2="1" y2=".7"><stop stop-color="#515e73"/><stop offset=".5" stop-color="#1a2332"/><stop offset="1" stop-color="#080e18"/></linearGradient>
+    <radialGradient id="shadow"><stop stop-color="#1e315b" stop-opacity=".24"/><stop offset="1" stop-color="#1e315b" stop-opacity="0"/></radialGradient>
+    <clipPath id="display"><path d="M162 130 568 102 533 361 124 368Z"/></clipPath>
+  </defs>
+  <ellipse cx="360" cy="460" rx="345" ry="56" fill="url(#shadow)"/>
+  <ellipse cx="627" cy="466" rx="97" ry="27" fill="url(#shadow)"/>
+  <!-- Computadora: carcasa, pantalla y base. -->
+  <path d="M155 116 576 87Q587 86 585 100L548 374 107 383 143 128Q145 117 155 116Z" fill="url(#metal)"/>
+  <path d="M155 123 574 95 538 372 115 377Z" fill="#0c1422"/>
+  <path d="M162 130 568 102 533 361 124 368Z" fill="url(#screen)"/>
+  <g clip-path="url(#display)">
+    <path d="M86 322C241 406 247 136 425 207S555 244 624 121L620 362 109 399Z" fill="url(#wave)"/>
+    <path d="M108 321C253 394 272 163 424 218S561 235 590 158" fill="none" stroke="#b9dbff" stroke-width="3" opacity=".8"/>
+    <path d="M96 358C246 436 339 225 456 278S572 270 603 237" fill="none" stroke="#9ecbff" stroke-width="2" opacity=".6"/>
+    <path d="M84 280C230 335 259 119 389 164S541 208 592 107" fill="none" stroke="#578dff" stroke-width="2" opacity=".4"/>
+  </g>
+  <path d="M316 119 392 114 389 123 316 128Z" fill="#0c1422"/>
+  <path d="M107 383 548 374 635 434Q638 439 622 444L127 464Q115 464 101 459L32 440Q24 437 35 431Z" fill="url(#metal)"/>
+  <path d="M133 391 530 384 579 417 88 434Z" fill="#636f80"/>
+  <g fill="none" stroke="#bec8d7" stroke-width="3" opacity=".8">
+    <path d="M131 400 542 394M116 410 555 404M101 421 570 415"/>
+    <path d="M155 391 126 431M187 390 164 430M219 389 201 428M251 388 238 427M283 387 276 426M315 386 314 425M347 386 351 423M379 385 389 422M411 385 426 421M443 384 464 420M475 384 501 418M507 384 539 417"/>
+  </g>
+  <path d="M272 434 390 430 418 446 287 450Z" fill="#c4cedb" stroke="#9daaba"/>
+  <path d="M32 440 124 463 625 443 619 450 127 472 39 448Z" fill="#8d9aab"/>
+  <!-- Audífonos y mouse. -->
+  <path d="M554 328 554 269C554 177 677 177 677 269L677 328" fill="none" stroke="#0c1320" stroke-width="25"/>
+  <path d="M554 270C554 186 677 186 677 270" fill="none" stroke="#58657a" stroke-width="12"/>
+  <path d="M554 265 554 321M677 265 677 321" stroke="#b7c2d3" stroke-width="9"/>
+  <rect x="532" y="301" width="48" height="106" rx="22" fill="url(#dark)" transform="rotate(-9 556 354)"/>
+  <rect x="654" y="301" width="48" height="106" rx="22" fill="url(#dark)" transform="rotate(9 678 354)"/>
+  <path d="M546 324 550 383M666 323 671 382" stroke="#718096" stroke-width="2" opacity=".5"/>
+  <path d="M613 404C633 388 662 397 674 417L693 450C706 476 650 493 633 469L610 437Q602 417 613 404Z" fill="url(#metal)"/>
+  <path d="M637 399 654 435" stroke="#8794a6" stroke-width="2"/>
+  <rect x="636" y="411" width="6" height="15" rx="3" fill="#59677c" transform="rotate(-25 639 418)"/>
+</svg>

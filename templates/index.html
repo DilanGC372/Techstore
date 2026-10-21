@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+        <section id="inicio" class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">BIENVENIDO A TECHSTORE</p>
+                <h1 id="hero-title">Tecnología que<br><span>impulsa</span> tu día.</h1>
+                <p class="hero-description">Para esa gran idea, tu próxima clase o un momento para ti. Descubre computadoras y accesorios que van contigo.</p>
+                <a class="button" href="#categorias">Explorar categorías <span aria-hidden="true">↗</span></a>
+                <p class="hero-caption">Tu siguiente idea empieza aquí.</p>
+            </div>
+            <div class="hero-visual">
+                <span class="visual-label">ESTUDIA. CREA. CONECTA.</span>
+                <div class="device-scene">
+                    <img class="device-laptop" src="{{ url_for('static', filename='images/laptop-plateada.png') }}" alt="Laptop plateada con pantalla azul." fetchpriority="high">
+                    <img class="device-headphones" src="{{ url_for('static', filename='images/audifonos-diadema.png') }}" alt="Audífonos negros de diadema.">
+                    <img class="device-earbuds" src="{{ url_for('static', filename='images/audifonos-con-estuche.png') }}" alt="Audífonos blancos con estuche de carga.">
+                </div>
+                <span class="visual-caption">Todo un mundo de posibilidades.</span>
+            </div>
+        </section>
+
+        <section id="categorias" class="categories" aria-labelledby="categories-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">ENCUENTRA LO QUE VA CONTIGO</p>
+                    <h2 id="categories-title">Tu mundo, mejor conectado.</h2>
+                </div>
+                <p>Dos categorías. Muchas posibilidades.</p>
+            </div>
+            <div class="category-grid">
+                <a id="computadoras" class="category-card category-link" href="{{ url_for('computadoras') }}">
+                    <div class="category-copy">
+                        <span class="category-number">01 / COMPUTADORAS</span>
+                        <h3>Un equipo para tus ideas.</h3>
+                        <p>Laptops y equipos de escritorio para estudiar, trabajar y crear a tu ritmo.</p>
+                        <span class="category-cta">Ver computadoras <span aria-hidden="true">↗</span></span>
+                    </div>
+                    <img class="category-image" src="{{ url_for('static', filename='images/laptop-plateada.png') }}" alt="Laptop plateada abierta." loading="lazy">
+                </a>
+                <a id="accesorios" class="category-card category-link" href="{{ url_for('accesorios') }}">
+                    <div class="category-copy">
+                        <span class="category-number">02 / ACCESORIOS</span>
+                        <h3>Los detalles hacen la diferencia.</h3>
+                        <p>Audio, teclados y complementos para disfrutar más de tu espacio y de tu equipo.</p>
+                        <span class="category-cta">Ver accesorios <span aria-hidden="true">↗</span></span>
+                    </div>
+                    <img class="category-image" src="{{ url_for('static', filename='images/audifonos-diadema.png') }}" alt="Audífonos negros de diadema." loading="lazy">
+                </a>
+            </div>
+        </section>
+{% endblock %}

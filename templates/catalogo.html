@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ titulo }} | TechStore{% endblock %}
+{% block content %}
+<nav class="breadcrumbs" aria-label="Ruta de navegación">
+    <a href="{{ url_for('index') }}">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">{{ titulo }}</span>
+</nav>
+<section class="catalog-intro" aria-labelledby="catalog-title">
+    <p class="eyebrow">EXPLORA TECHSTORE</p>
+    <h1 id="catalog-title">{{ titulo }}<span>.</span></h1>
+    <p>{{ introduccion }}</p>
+</section>
+<aside class="demo-notice" aria-label="Información del catálogo">
+    {% if demo %}
+    <strong>Catálogo de demostración.</strong> Productos, precios y existencias de ejemplo. Precios en pesos mexicanos (MXN).
+    {% else %}
+    Precios en pesos mexicanos (MXN).
+    {% endif %}
+</aside>
+<section class="catalog-section" aria-label="Productos de {{ titulo | lower }}">
+    <div class="catalog-toolbar">
+        <h2>Encuentra tu próximo favorito</h2>
+        {% if not error %}<p>{{ productos | length }} {{ 'producto' if productos | length == 1 else 'productos' }}</p>{% endif %}
+    </div>
+    {% if error %}
+    <div class="catalog-empty" role="alert">
+        <p>{{ error }}</p>
+        <a class="button" href="{{ request.path }}">Volver a intentar</a>
+    </div>
+    {% else %}
+    <div class="product-grid">
+        {% for producto in productos %}
+        <article class="product-card" aria-labelledby="producto-{{ producto.id }}">
+            <figure class="product-figure">
+                <img src="{{ url_for('static', filename=producto.imagen_archivo) }}"
+                     alt="{{ producto.imagen_nota or producto.nombre }}"
+                     width="400" height="300" loading="lazy"
+                     data-image-fallback="{{ url_for('static', filename='images/imagen-pendiente.svg') }}">
+                <figcaption>{{ producto.imagen_nota }}</figcaption>
+            </figure>
+            <div class="product-body">
+                <p class="product-brand">{{ producto.marca }}</p>
+                <h3 id="producto-{{ producto.id }}">{{ producto.nombre }}</h3>
+                <p class="product-description">{{ producto.descripcion or 'Descripción pendiente.' }}</p>
+                <dl class="product-specs">
+                    <div><dt>Categoría</dt><dd>{{ producto.categoria }}</dd></div>
+                    <div><dt>{{ 'Existencias de ejemplo' if demo else 'Existencias' }}</dt><dd>{{ producto.stock }} unidades</dd></div>
+                </dl>
+                <div class="product-price-row">
+                    <p class="product-price"><span class="price-label">{{ 'Precio de ejemplo' if demo else 'Precio' }}</span>${{ "{:,.2f}".format(producto.precio) }} MXN</p>
+                    <span class="stock-badge{% if producto.stock == 0 %} stock-empty{% endif %}">{{ 'Disponible' if producto.stock > 0 else 'Agotado' }}</span>
+                </div>
+            </div>
+        </article>
+        {% else %}
+        <p class="catalog-empty">Todavía no hay productos en esta categoría.</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
